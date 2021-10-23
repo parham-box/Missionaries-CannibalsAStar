@@ -14,7 +14,8 @@ void setup() {
   //add root
   states.add(initalState);
   nodes.add(new Node(initalState, 0, -1, false, 0));
-  int size = 1;
+  status.add(0);
+  int size = 0;
   while (true) {
     boolean flag = false;
     Node cur = nodes.get(0);
@@ -70,6 +71,21 @@ void setup() {
   //BLACK: Node with children
   //GRAY: A node on the answer path
   //GREEN: Goal node
+
+
+  int n = visitedNodes.size();
+  for (int i = 0; i < n-1; i++)
+    for (int j = 0; j < n-i-1; j++)
+      if (visitedNodes.get(j).getID() > visitedNodes.get(j+1).getID())
+      {
+        // swap arr[j+1] and arr[j]
+        Node temp = visitedNodes.get(j);
+        visitedNodes.set(j, visitedNodes.get(j+1));
+        visitedNodes.set(j+1, temp);
+      }
+
+
+
   int v = 1;
   int y = 0;
   int[] parentNodeNumber = new int[visitedNodes.size()];
@@ -83,7 +99,7 @@ void setup() {
         flag = true;
       }
     }
-    if (nodes.get(x).getState().isValid()) {
+    if (visitedNodes.get(x).getState().isValid()) {
       if (!flag) {
 
         status.add(0);
@@ -94,21 +110,96 @@ void setup() {
       status.add(-1);
     }
 
-parentNodeNumber[x] = nodes.get(x).g
     for (int k = 0; k < x; k++) {
-      if (nodes.get(x).getParent().isEqual(nodes.get(k))) {
+      if (visitedNodes.get(x).getState().getParent().isEqual(visitedNodes.get(k).getState())) {
         parentNodeNumber[x] = k;
         break;
       }
     }
   }
+  fill(0);
+  ArrayList<Integer> rowIndex = new ArrayList<Integer>();
+  for (int i = 0; i < visitedNodes.size(); i++) {
+    //nodes.get(i).printState();
 
-  for (int i =0; i < visitedNodes.size(); i++) {
-    fill(0);
-    text(visitedNodes.get(i).getState().stateString(), 30, 30+(v*50));
-    v++;
+    if (i!=0) {
+      if (visitedNodes.get(i).getDepth() == visitedNodes.get(i-1).getDepth()) {
+        y++;
+      } else {
+        v++;
+        y =0;
+        rowIndex.add(i);
+      }
+      int parentIndex = parentNodeNumber[i];
+      int li = 0;
+      for (int x = 1; x < rowIndex.size(); x++) {
+        if (parentIndex < rowIndex.get(x)) {
+          li = parentIndex - rowIndex.get(x -1);
+          break;
+        }
+      }
+
+      ArrayList<Integer> path = new ArrayList<Integer>();
+      path.add(visitedNodes.size()-1);
+      int parent = parentNodeNumber[visitedNodes.size()-1];
+      path.add(parent);
+
+      while (true) {
+        if (parent != -1) {
+          parent = parentNodeNumber[parent];
+          path.add(parent);
+        } else {
+          break;
+        }
+      }
+
+      stroke(0);
+
+      if (i == visitedNodes.size()-1) {
+        stroke(color(0, 150, 0));
+        fill(color(0, 150, 0));
+      } else if (path.contains(i)) {
+        fill(color(100, 100, 100));
+        stroke(color(0, 150, 0));
+      } else if (status.get(i) == 2) {
+        fill(color(0, 0, 256));
+      } else if (status.get(i) == -1) {
+        fill(color(256, 0, 0));
+      } else {
+        fill(0);
+      }
+
+      line(30+(li*50)+25, 40+((v-1)*50) + 5, 30+(y*50) + 25, 30+(v*50)-20);
+      textSize(9);
+
+      text("A* score: "+visitedNodes.get(i).getCost(), 30+(y*50), 15+(v*50));
+
+      textSize(14);
+
+      text(visitedNodes.get(i).getState().stateString(), 30+(y*50), 30+(v*50));
+      textSize(9);
+
+      int a = visitedNodes.get(i).getState().getH() == -1 ? 0  :visitedNodes.get(i).getState().getH();
+      text("h score: "+a,30+(y*50), 45+(v*50));
+    } else {
+      fill(color(0, 150, 200));
+      textSize(9);
+
+      text("A* score: "+visitedNodes.get(i).getCost(), 30, 15+(v*50));
+      textSize(14);
+
+      text(visitedNodes.get(i).getState().stateString(), 30, 30+(v*50));
+      textSize(9);
+      int a = visitedNodes.get(i).getState().getH() == -1 ? 0  :visitedNodes.get(i).getState().getH();
+      text("h score: "+a, 30, 45+(v*50));
+    }
   }
+  int total = visitedNodes.size();
+  fill(0);
+  text("Visited Nodes: "+total, width - 120, height - 20);
 }
+
+
 ArrayList<Node> bubbleSort(ArrayList<Node> arr)
 {
   int n = arr.size();
