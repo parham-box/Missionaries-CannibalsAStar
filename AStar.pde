@@ -180,7 +180,7 @@ void setup() {
       textSize(9);
 
       int a = visitedNodes.get(i).getState().getH() == -1 ? 0  :visitedNodes.get(i).getState().getH();
-      text("h score: "+a,30+(y*50), 45+(v*50));
+      text("h score: "+a, 30+(y*50), 45+(v*50));
     } else {
       fill(color(0, 150, 200));
       textSize(9);
@@ -196,6 +196,7 @@ void setup() {
   }
   int total = visitedNodes.size();
   fill(0);
+  textSize(14);
   text("Visited Nodes: "+total, width - 120, height - 20);
 }
 
