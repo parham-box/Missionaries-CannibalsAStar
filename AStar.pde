@@ -159,7 +159,7 @@ void setup() {
         stroke(color(0, 150, 0));
         fill(color(0, 150, 0));
       } else if (path.contains(i)) {
-        fill(color(100, 100, 100));
+        fill(color(0, 150, 0));
         stroke(color(0, 150, 0));
       } else if (status.get(i) == 2) {
         fill(color(0, 0, 256));
@@ -169,10 +169,10 @@ void setup() {
         fill(0);
       }
 
-      line(30+(li*50)+25, 40+((v-1)*50) + 5, 30+(y*50) + 25, 30+(v*50)-20);
+      line(30+(li*50)+25, 30+((v-1)*50) + 11, 30+(y*50) + 25, 30+(v*50)-20);
       textSize(9);
 
-      text("A* score: "+visitedNodes.get(i).getCost(), 30+(y*50), 15+(v*50));
+      text("A* score: "+visitedNodes.get(i).getCost(), 30+(y*50), 18+(v*50));
 
       textSize(14);
 
@@ -180,18 +180,18 @@ void setup() {
       textSize(9);
 
       int a = visitedNodes.get(i).getState().getH() == -1 ? 0  :visitedNodes.get(i).getState().getH();
-      text("h score: "+a, 30+(y*50), 45+(v*50));
+      text("h score: "+a, 30+(y*50), 40+(v*50));
     } else {
       fill(color(0, 150, 200));
       textSize(9);
+      text("A* score: "+visitedNodes.get(i).getCost(), 30, 18+(v*50));
 
-      text("A* score: "+visitedNodes.get(i).getCost(), 30, 15+(v*50));
       textSize(14);
-
       text(visitedNodes.get(i).getState().stateString(), 30, 30+(v*50));
+
       textSize(9);
       int a = visitedNodes.get(i).getState().getH() == -1 ? 0  :visitedNodes.get(i).getState().getH();
-      text("h score: "+a, 30, 45+(v*50));
+      text("h score: "+a, 30, 40+(v*50));
     }
   }
   int total = visitedNodes.size();
