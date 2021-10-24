@@ -33,9 +33,9 @@ class Node {
   public int getDepth() {
     return this.depth;
   }
-    public int getCost() {
-      //f(n)=g(n)+h(n)
-      //because the cost of each move is considered to be 1, the depth is g(n)
+  public int getCost() {
+    //f(n)=g(n)+h(n)
+    //because the cost of each move is considered to be 1, the depth is g(n)
     return this.depth+this.state.getH();
   }
 
